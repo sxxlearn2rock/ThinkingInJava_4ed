@@ -7,23 +7,26 @@ import java.util.regex.Pattern;
 public class DirList {
 	public static void main(String[] args) {
 		File path = new File("D:\\SXX\\TestPics");
-		String[] list;
-		String reg = ".*\\.jpg";
-		if (reg.length() == 0) {
-			list = path.list();
-		}else {
-			list = path.list(new FilenameFilter() {		//使用匿名内部类
-				private Pattern p = Pattern.compile(reg);			
-				@Override
-				public boolean accept(File dir, String name) {
-					return p.matcher(name).matches();
-				}
-			});
-		}
-		
-		for (String string : list) {
-			System.out.println(string);
+		String[] list = path.list(new DirFilter("image."));
+		System.out.println(list.length);
+		for (String dirItem : list) {
+			System.out.print(dirItem + " ");
 		}
 	}
+	
+}
+
+class DirFilter implements FilenameFilter{
+	private Pattern pattern;
+
+	public DirFilter(String regex) {
+		pattern = Pattern.compile(regex);
+	}
+	
+	@Override
+	public boolean accept(File dir, String name) {
+		return pattern.matcher(name).matches();
+	}
+	
 	
 }
